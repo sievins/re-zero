@@ -1,6 +1,7 @@
 import { SignedOut, SignInButton, SignedIn, UserButton } from "@clerk/nextjs";
-import { TaskList } from "~/app/_components/task-list";
 import { HydrateClient } from "~/trpc/server";
+import { TaskList } from "~/app/_components/task-list";
+import { TaskForm } from "~/app/_components/task-form";
 
 export default function Home() {
   return (
@@ -14,6 +15,7 @@ export default function Home() {
           <h2 className="text-xl font-extrabold tracking-tight sm:text-[1.3rem]">
             Complete tasks with zero resistance
           </h2>
+          <TaskForm />
           <TaskList />
           {/* Authentication */}
           <SignedOut>
