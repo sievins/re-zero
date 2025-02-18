@@ -1,9 +1,13 @@
 import { SignedOut, SignInButton, SignedIn, UserButton } from "@clerk/nextjs";
-import { HydrateClient } from "~/trpc/server";
+import { currentUser } from "@clerk/nextjs/server";
+import { HydrateClient, api } from "~/trpc/server";
 import { TaskList } from "~/app/_components/task-list";
 import { TaskForm } from "~/app/_components/task-form";
 
-export default function Home() {
+export default async function Home() {
+  const user = await currentUser();
+  void api.task.getAll.prefetch({ userId: user?.id ?? "" });
+
   return (
     <HydrateClient>
       <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#f7fafd] to-[#ebf2fa]">
