@@ -45,7 +45,7 @@ export function TaskList() {
         <div key={item.id}>
           <div
             className={cn(
-              "flex w-[32rem] items-center rounded-md p-2 transition-colors",
+              "flex w-[18rem] items-center rounded-md p-2 transition-colors sm:w-[32rem]",
               highlightedItems.includes(item.id) ? "bg-primary/40" : "",
             )}
           >
