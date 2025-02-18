@@ -14,6 +14,7 @@ import {
   FormField,
   FormItem,
   FormLabel,
+  FormMessage,
 } from "~/components/ui/form";
 import { Input } from "~/components/ui/input";
 
@@ -24,7 +25,6 @@ const formSchema = z.object({
 const maxChars = 280;
 
 // TODO: Handle small screens
-// TODO: Handle errors
 
 export function TaskForm() {
   const user = useUser();
@@ -45,6 +45,7 @@ export function TaskForm() {
     const inputText = e.target.value;
     setCharCount(inputText.length);
     form.setValue("task", inputText);
+    form.clearErrors("task");
   };
 
   function onSubmit(values: z.infer<typeof formSchema>) {
@@ -60,6 +61,9 @@ export function TaskForm() {
       form.reset();
       setCharCount(0);
       await utils.task.invalidate();
+    },
+    onError: (error) => {
+      form.setError("task", { type: "server", message: error.message });
     },
   });
 
@@ -101,6 +105,7 @@ export function TaskForm() {
                     </Button>
                   </div>
                 </FormControl>
+                <FormMessage className="pl-3" />
               </FormItem>
             )}
           />
