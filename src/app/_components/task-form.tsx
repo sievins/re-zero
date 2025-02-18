@@ -24,8 +24,6 @@ const formSchema = z.object({
 
 const maxChars = 280;
 
-// TODO: Handle small screens
-
 export function TaskForm() {
   const user = useUser();
 
@@ -78,17 +76,17 @@ export function TaskForm() {
               <FormItem>
                 <FormLabel hidden>Task</FormLabel>
                 <FormControl>
-                  <div className="flex">
+                  <div className="flex flex-col sm:flex-row">
                     <div className="relative">
                       <Input
                         {...field}
                         type="text"
                         maxLength={maxChars}
                         onChange={handleInputChange}
-                        className="pr-[4.5rem]" // Add padding to the right to make space for the counter
+                        className="pr-[4.5rem] text-sm" // Add padding to the right to make space for the counter
                       />
                       <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
-                        <span className="text-muted-foreground md:text-sm">
+                        <span className="text-sm text-muted-foreground">
                           {charCount}/{maxChars}
                         </span>
                       </div>
@@ -96,7 +94,7 @@ export function TaskForm() {
                     <Button
                       type="submit"
                       disabled={!taskValue.trim() || createTask.isPending}
-                      className="ml-2 w-32" // Make wide enough for loader icon to avoid content shift
+                      className="mt-2 w-32 sm:ml-2 sm:mt-0" // Make wide enough for loader icon to avoid content shift
                     >
                       {createTask.isPending && (
                         <Loader2 className="animate-spin" />
