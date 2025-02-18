@@ -86,7 +86,7 @@ export function TaskForm() {
                         className="pr-[4.5rem] text-sm" // Add padding to the right to make space for the counter
                       />
                       <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
-                        <span className="text-sm text-muted-foreground">
+                        <span className="text-sm text-muted-foreground/60">
                           {charCount}/{maxChars}
                         </span>
                       </div>
