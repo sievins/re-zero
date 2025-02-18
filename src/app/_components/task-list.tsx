@@ -1,25 +1,13 @@
 "use client";
 
 import { useState } from "react";
+import { useAtomValue } from "jotai";
 import { useUser } from "@clerk/nextjs";
 import { api } from "~/trpc/react";
 import { Checkbox } from "~/components/ui/checkbox";
 import { Separator } from "~/components/ui/separator";
 import { cn } from "~/lib/utils";
-
-interface Task {
-  id: number;
-  description: string;
-}
-
-const exampleTasks: Task[] = [
-  { id: 1, description: "Car insurance" },
-  { id: 2, description: "Invite Sarah for dinner" },
-  { id: 3, description: "Email documents to John" },
-  { id: 4, description: "Read book" },
-  { id: 5, description: "Create exercise routine" },
-  { id: 6, description: "Finish project" },
-];
+import { exampleTasksAtom } from "~/lib/atoms";
 
 export function TaskList() {
   const { isLoaded } = useUser();
@@ -36,6 +24,8 @@ function TaskListContent() {
   const [tasksFromApi, taskQuery] = api.task.getAll.useSuspenseQuery({
     userId: user?.id ?? "",
   });
+
+  const exampleTasks = useAtomValue(exampleTasksAtom);
 
   const [highlightedItems, setHighlightedItems] = useState<number[]>([]);
 

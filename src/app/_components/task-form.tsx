@@ -4,6 +4,7 @@ import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import { useSetAtom } from "jotai";
 import { useUser } from "@clerk/nextjs";
 import { Loader2 } from "lucide-react";
 import { api } from "~/trpc/react";
@@ -17,6 +18,7 @@ import {
   FormMessage,
 } from "~/components/ui/form";
 import { Input } from "~/components/ui/input";
+import { exampleTasksAtom } from "~/lib/atoms";
 
 const formSchema = z.object({
   task: z.string().min(1).max(280),
@@ -25,7 +27,9 @@ const formSchema = z.object({
 const maxChars = 280;
 
 export function TaskForm() {
-  const user = useUser();
+  const { user, isSignedIn } = useUser();
+
+  const setExampleTasks = useSetAtom(exampleTasksAtom);
 
   const [charCount, setCharCount] = useState(0);
 
@@ -48,10 +52,19 @@ export function TaskForm() {
 
   function onSubmit(values: z.infer<typeof formSchema>) {
     // TODO: Optimistically update
-    createTask.mutate({
-      description: values.task,
-      userId: user.user?.id ?? "",
-    }); // TODO: handle not logged in
+    if (isSignedIn) {
+      createTask.mutate({
+        description: values.task,
+        userId: user?.id ?? "",
+      });
+    } else {
+      setExampleTasks((exampleTasks) => [
+        { id: exampleTasks.length + 1, description: values.task },
+        ...exampleTasks,
+      ]);
+      form.reset();
+      setCharCount(0);
+    }
   }
 
   const utils = api.useUtils();
