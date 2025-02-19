@@ -23,6 +23,14 @@ export const taskRouter = createTRPCRouter({
       z.object({ description: z.string().min(1).max(280), userId: z.string() }),
     )
     .mutation(async ({ ctx, input }) => {
+      const count = await ctx.db.task.count({
+        where: { userId: input.userId },
+      });
+
+      if (count > 100) {
+        throw new Error("You can't have more than 100 tasks. Time to tidy up!");
+      }
+
       return ctx.db.task.create({
         data: {
           description: input.description,
