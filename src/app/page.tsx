@@ -10,7 +10,7 @@ export default async function Home() {
 
   return (
     <HydrateClient>
-      <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#f7fafd] to-[#ebf2fa]">
+      <main className="flex min-h-screen flex-col items-center bg-gradient-to-b from-[#f7fafd] to-[#ebf2fa] sm:pt-16">
         <div className="container flex flex-col items-center justify-center gap-10 px-4 py-16 sm:gap-16">
           {/* Main content */}
           <div className="flex flex-col items-center gap-4">
