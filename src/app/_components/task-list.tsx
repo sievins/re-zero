@@ -6,14 +6,24 @@ import { useUser } from "@clerk/nextjs";
 import { api } from "~/trpc/react";
 import { Checkbox } from "~/components/ui/checkbox";
 import { Separator } from "~/components/ui/separator";
+import { Skeleton } from "~/components/ui/skeleton";
 import { cn } from "~/lib/utils";
 import { exampleTasksAtom } from "~/lib/atoms";
 
 export function TaskList() {
   const { isLoaded } = useUser();
   if (!isLoaded) {
-    // TODO: Skeleton loader and content shift
-    return null;
+    return (
+      <div className="space-y-[calc(1rem+1px)]">
+        {/* +1px to take into account the separator */}
+        <Skeleton className="h-9 w-[18rem] bg-primary/40 sm:w-[32rem]" />
+        <Skeleton className="h-9 w-[18rem] bg-primary/40 sm:w-[32rem]" />
+        <Skeleton className="h-9 w-[18rem] bg-primary/40 sm:w-[32rem]" />
+        <Skeleton className="h-9 w-[18rem] bg-primary/40 sm:w-[32rem]" />
+        <Skeleton className="h-9 w-[18rem] bg-primary/40 sm:w-[32rem]" />
+        <Skeleton className="h-9 w-[18rem] bg-primary/40 sm:w-[32rem]" />
+      </div>
+    );
   }
   return <TaskListContent />;
 }
