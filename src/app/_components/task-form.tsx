@@ -72,7 +72,7 @@ export function TaskForm() {
     onSuccess: async () => {
       form.reset();
       setCharCount(0);
-      await utils.task.invalidate();
+      await utils.task.getAll.invalidate({ userId: user?.id ?? "" });
     },
     onError: (error) => {
       form.setError("task", { type: "server", message: error.message });

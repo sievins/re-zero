@@ -3,10 +3,14 @@
 import { Suspense, useState } from "react";
 import { useAtomValue } from "jotai";
 import { useUser } from "@clerk/nextjs";
+import { ErrorBoundary, type FallbackProps } from "react-error-boundary";
+import { AlertCircle } from "lucide-react";
 import { api } from "~/trpc/react";
 import { Checkbox } from "~/components/ui/checkbox";
 import { Separator } from "~/components/ui/separator";
 import { Skeleton } from "~/components/ui/skeleton";
+import { Button } from "~/components/ui/button";
+import { Alert, AlertTitle, AlertDescription } from "~/components/ui/alert";
 import { cn } from "~/lib/utils";
 import { exampleTasksAtom } from "~/lib/atoms";
 
@@ -22,21 +26,43 @@ const skeleton = (
   </div>
 );
 
+function Fallback({ resetErrorBoundary }: FallbackProps) {
+  return (
+    <Alert variant="destructive">
+      <AlertCircle className="!top-[unset] h-6 w-6" />
+      <AlertTitle className="mb-2 text-base">Failed to load tasks</AlertTitle>
+      <AlertDescription>
+        <Button onClick={resetErrorBoundary} variant="outline">
+          Try again
+        </Button>
+      </AlertDescription>
+    </Alert>
+  );
+}
+
 export function TaskList() {
-  const { isLoaded } = useUser();
+  const utils = api.useUtils();
+  const { isLoaded, user } = useUser();
   if (!isLoaded) {
     return skeleton;
   }
   return (
-    <Suspense fallback={skeleton}>
-      <TaskListContent />
-    </Suspense>
+    <ErrorBoundary
+      FallbackComponent={Fallback}
+      onReset={async () => {
+        // Invalidate the failing query and clear error cache so it refetches on re-render.
+        await utils.task.getAll.reset({ userId: user?.id ?? "" });
+      }}
+    >
+      <Suspense fallback={skeleton}>
+        <TaskListContent />
+      </Suspense>
+    </ErrorBoundary>
   );
 }
 
 function TaskListContent() {
   const { isSignedIn, user } = useUser();
-  // TODO: Handle error
   const [tasksFromApi] = api.task.getAll.useSuspenseQuery({
     userId: user?.id ?? "",
   });
