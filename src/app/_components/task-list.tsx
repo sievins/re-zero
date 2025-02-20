@@ -1,7 +1,7 @@
 "use client";
 
-import { Suspense, useState } from "react";
-import { useAtomValue } from "jotai";
+import { Suspense, useEffect, useState } from "react";
+import { useAtom, useAtomValue } from "jotai";
 import { useUser } from "@clerk/nextjs";
 import { ErrorBoundary, type FallbackProps } from "react-error-boundary";
 import { AlertCircle } from "lucide-react";
@@ -12,7 +12,7 @@ import { Skeleton } from "~/components/ui/skeleton";
 import { Button } from "~/components/ui/button";
 import { Alert, AlertTitle, AlertDescription } from "~/components/ui/alert";
 import { cn } from "~/lib/utils";
-import { exampleTasksAtom } from "~/lib/atoms";
+import { exampleTasksAtom, tasksAtom } from "~/lib/atoms";
 
 const skeleton = (
   <div className="space-y-[calc(1rem+1px)]">
@@ -68,6 +68,14 @@ function TaskListContent() {
   });
 
   const exampleTasks = useAtomValue(exampleTasksAtom);
+  const [userTasks, setUserTasks] = useAtom(tasksAtom);
+
+  // Store tasks from tRPC in store. The store is the source of truth so we can utilise optimistic updates.
+  useEffect(() => {
+    if (isSignedIn) {
+      setUserTasks(tasksFromApi);
+    }
+  }, [isSignedIn, tasksFromApi, setUserTasks]);
 
   const [highlightedItems, setHighlightedItems] = useState<number[]>([]);
 
@@ -80,7 +88,9 @@ function TaskListContent() {
     }
   };
 
-  const tasks = isSignedIn ? tasksFromApi : exampleTasks;
+  const tasks: typeof userTasks | typeof exampleTasks = isSignedIn
+    ? userTasks
+    : exampleTasks;
 
   return (
     <div className="space-y-2">
@@ -92,7 +102,7 @@ function TaskListContent() {
               highlightedItems.includes(item.id) ? "bg-primary/40" : "",
             )}
           >
-            <Checkbox id={`${item.id}`} />
+            <Checkbox id={`${item.id}`} disabled={Boolean(item.isOptimistic)} />
             <label
               htmlFor={`${item.id}`}
               className="ml-2 max-w-sm text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
@@ -102,6 +112,7 @@ function TaskListContent() {
             <button
               onClick={() => handleHighlight(item.id)}
               className="ml-auto text-sm text-primary hover:underline focus:outline-none"
+              disabled={Boolean(item.isOptimistic)}
             >
               Mark
             </button>

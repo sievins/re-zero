@@ -18,7 +18,7 @@ import {
   FormMessage,
 } from "~/components/ui/form";
 import { Input } from "~/components/ui/input";
-import { exampleTasksAtom } from "~/lib/atoms";
+import { exampleTasksAtom, tasksAtom } from "~/lib/atoms";
 
 const formSchema = z.object({
   task: z.string().min(1).max(280),
@@ -30,6 +30,7 @@ export function TaskForm() {
   const { user, isSignedIn } = useUser();
 
   const setExampleTasks = useSetAtom(exampleTasksAtom);
+  const setTasks = useSetAtom(tasksAtom);
 
   const [charCount, setCharCount] = useState(0);
 
@@ -51,15 +52,31 @@ export function TaskForm() {
   };
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    // TODO: Optimistically update
     if (isSignedIn) {
+      // Optimistically update the UI
+      setTasks((tasks) => [
+        {
+          id: 0, // PostgreSQL starts IDs at 1
+          description: values.task,
+          isOptimistic: true,
+          createdAt: new Date(),
+          marked: false,
+          userId: user.id,
+        },
+        ...tasks,
+      ]);
+
       createTask.mutate({
         description: values.task,
         userId: user?.id ?? "",
       });
     } else {
       setExampleTasks((exampleTasks) => [
-        { id: exampleTasks.length + 1, description: values.task },
+        {
+          id: exampleTasks.length + 1,
+          description: values.task,
+          isOptimistic: false,
+        },
         ...exampleTasks,
       ]);
       form.reset();
@@ -76,6 +93,8 @@ export function TaskForm() {
     },
     onError: (error) => {
       form.setError("task", { type: "server", message: error.message });
+      // Remove optimistically added task from UI
+      setTasks((tasks) => tasks.filter((task) => task.isOptimistic !== true));
     },
   });
 
