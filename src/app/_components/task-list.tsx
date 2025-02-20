@@ -170,7 +170,7 @@ function TaskListContent() {
               className="ml-auto text-sm text-primary hover:underline focus:outline-none"
               disabled={Boolean(item.isOptimistic)}
             >
-              Mark
+              {markedTasks.includes(item.id) ? "Unmark" : "Mark"}
             </button>
           </div>
           {index < tasks.length - 1 && <Separator className="my-2" />}
