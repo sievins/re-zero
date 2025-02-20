@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { Suspense, useState } from "react";
 import { useAtomValue } from "jotai";
 import { useUser } from "@clerk/nextjs";
 import { api } from "~/trpc/react";
@@ -10,28 +10,34 @@ import { Skeleton } from "~/components/ui/skeleton";
 import { cn } from "~/lib/utils";
 import { exampleTasksAtom } from "~/lib/atoms";
 
+const skeleton = (
+  <div className="space-y-[calc(1rem+1px)]">
+    {/* +1px to take into account the separator */}
+    <Skeleton className="h-9 w-[18rem] bg-primary/40 sm:w-[32rem]" />
+    <Skeleton className="h-9 w-[18rem] bg-primary/40 sm:w-[32rem]" />
+    <Skeleton className="h-9 w-[18rem] bg-primary/40 sm:w-[32rem]" />
+    <Skeleton className="h-9 w-[18rem] bg-primary/40 sm:w-[32rem]" />
+    <Skeleton className="h-9 w-[18rem] bg-primary/40 sm:w-[32rem]" />
+    <Skeleton className="h-9 w-[18rem] bg-primary/40 sm:w-[32rem]" />
+  </div>
+);
+
 export function TaskList() {
   const { isLoaded } = useUser();
   if (!isLoaded) {
-    return (
-      <div className="space-y-[calc(1rem+1px)]">
-        {/* +1px to take into account the separator */}
-        <Skeleton className="h-9 w-[18rem] bg-primary/40 sm:w-[32rem]" />
-        <Skeleton className="h-9 w-[18rem] bg-primary/40 sm:w-[32rem]" />
-        <Skeleton className="h-9 w-[18rem] bg-primary/40 sm:w-[32rem]" />
-        <Skeleton className="h-9 w-[18rem] bg-primary/40 sm:w-[32rem]" />
-        <Skeleton className="h-9 w-[18rem] bg-primary/40 sm:w-[32rem]" />
-        <Skeleton className="h-9 w-[18rem] bg-primary/40 sm:w-[32rem]" />
-      </div>
-    );
+    return skeleton;
   }
-  return <TaskListContent />;
+  return (
+    <Suspense fallback={skeleton}>
+      <TaskListContent />
+    </Suspense>
+  );
 }
 
 function TaskListContent() {
   const { isSignedIn, user } = useUser();
   // TODO: Handle error
-  const [tasksFromApi, taskQuery] = api.task.getAll.useSuspenseQuery({
+  const [tasksFromApi] = api.task.getAll.useSuspenseQuery({
     userId: user?.id ?? "",
   });
 
