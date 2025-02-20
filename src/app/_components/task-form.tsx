@@ -73,7 +73,10 @@ export function TaskForm() {
     } else {
       setExampleTasks((exampleTasks) => [
         {
-          id: exampleTasks.length + 1,
+          id:
+            exampleTasks.length > 0
+              ? Math.max(...exampleTasks.map((t) => t.id)) + 1
+              : 0,
           description: values.task,
           isOptimistic: false,
         },

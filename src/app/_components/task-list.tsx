@@ -109,7 +109,7 @@ function TaskListContent() {
     onSuccess: async () => {
       await utils.task.getAll.invalidate({ userId: user?.id ?? "" });
     },
-    onError: async (error, variables) => {
+    onError: async (_error, variables) => {
       // Refetch tasks from the API to revert the optimistic update (assumes getAll is still working)
       // Note: Faster than invalidating
       const tasks = await utils.task.getAll.fetch({ userId: user?.id ?? "" });
