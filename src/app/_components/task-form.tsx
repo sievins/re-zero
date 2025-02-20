@@ -60,7 +60,6 @@ export function TaskForm() {
           description: values.task,
           isOptimistic: true,
           createdAt: new Date(),
-          marked: false,
           userId: user.id,
         },
         ...tasks,

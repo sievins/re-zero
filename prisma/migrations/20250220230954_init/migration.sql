@@ -2,7 +2,6 @@
 CREATE TABLE "Task" (
     "id" SERIAL NOT NULL,
     "description" TEXT NOT NULL,
-    "marked" BOOLEAN NOT NULL DEFAULT false,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "userId" TEXT NOT NULL,
 
