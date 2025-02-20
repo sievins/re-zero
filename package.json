@@ -22,6 +22,7 @@
   },
   "dependencies": {
     "@clerk/nextjs": "^6.11.3",
+    "@formkit/auto-animate": "^0.8.2",
     "@hookform/resolvers": "^4.1.0",
     "@prisma/client": "^5.14.0",
     "@radix-ui/react-checkbox": "^1.1.4",
