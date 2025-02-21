@@ -20,7 +20,11 @@ export const taskRouter = createTRPCRouter({
 
   create: publicProcedure
     .input(
-      z.object({ description: z.string().min(1).max(280), userId: z.string() }),
+      z.object({
+        description: z.string().min(1).max(280),
+        userId: z.string(),
+        key: z.string(),
+      }),
     )
     .mutation(async ({ ctx, input }) => {
       const count = await ctx.db.task.count({
@@ -35,6 +39,7 @@ export const taskRouter = createTRPCRouter({
         data: {
           description: input.description,
           userId: input.userId,
+          key: input.key,
         },
       });
     }),

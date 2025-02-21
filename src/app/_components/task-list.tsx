@@ -144,7 +144,7 @@ function TaskListContent() {
   return (
     <div ref={parent} className="space-y-2">
       {tasks.map((item, index) => (
-        <div key={item.id}>
+        <div key={item.key}>
           <div
             className={cn(
               "flex w-[18rem] items-center rounded-md p-2 transition-colors sm:w-[32rem]",

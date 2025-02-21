@@ -52,11 +52,13 @@ export function TaskForm() {
   };
 
   function onSubmit(values: z.infer<typeof formSchema>) {
+    const key = `${Date.now()}`;
     if (isSignedIn) {
       // Optimistically update the UI
       setTasks((tasks) => [
         {
           id: 0, // PostgreSQL starts IDs at 1
+          key,
           description: values.task,
           isOptimistic: true,
           createdAt: new Date(),
@@ -68,6 +70,7 @@ export function TaskForm() {
       createTask.mutate({
         description: values.task,
         userId: user?.id ?? "",
+        key,
       });
     } else {
       setExampleTasks((exampleTasks) => [
@@ -76,6 +79,7 @@ export function TaskForm() {
             exampleTasks.length > 0
               ? Math.max(...exampleTasks.map((t) => t.id)) + 1
               : 0,
+          key,
           description: values.task,
           isOptimistic: false,
         },

@@ -9,6 +9,7 @@ datasource db {
 
 model Task {
   id          Int      @id @default(autoincrement())
+  key         String // Optimistically updated tasks and DB tasks share the same key, which ensures they aren't re-animated when created.
   description String
   createdAt   DateTime @default(now())
   userId      String
