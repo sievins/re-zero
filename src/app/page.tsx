@@ -1,5 +1,12 @@
-import { SignedOut, SignInButton, SignedIn, UserButton } from "@clerk/nextjs";
+import {
+  SignedOut,
+  SignInButton,
+  SignOutButton,
+  SignedIn,
+} from "@clerk/nextjs";
 import { currentUser } from "@clerk/nextjs/server";
+import { LogIn, LogOut } from "lucide-react";
+import { Button } from "~/components/ui/button";
 import { HydrateClient, api } from "~/trpc/server";
 import { TaskList } from "~/app/_components/task-list";
 import { TaskForm } from "~/app/_components/task-form";
@@ -10,8 +17,25 @@ export default async function Home() {
 
   return (
     <HydrateClient>
-      <main className="flex min-h-screen flex-col items-center bg-gradient-to-b from-[#f7fafd] to-[#ebf2fa] sm:pt-16">
-        <div className="container flex flex-col items-center justify-center gap-10 px-4 py-16 sm:gap-16">
+      <main className="flex min-h-screen flex-col items-center bg-gradient-to-b from-[#f7fafd] to-[#ebf2fa]">
+        {/* Authentication */}
+        <div className="my-4 mr-8 flex w-screen justify-end">
+          <SignedOut>
+            <SignInButton>
+              <Button>
+                <LogIn /> Sign in
+              </Button>
+            </SignInButton>
+          </SignedOut>
+          <SignedIn>
+            <SignOutButton>
+              <Button variant="outline">
+                <LogOut /> Sign out
+              </Button>
+            </SignOutButton>
+          </SignedIn>
+        </div>
+        <div className="container absolute flex flex-col items-center justify-center gap-10 px-4 py-20 sm:relative sm:gap-16 sm:py-16">
           {/* Main content */}
           <div className="flex flex-col items-center gap-4">
             <h1 className="text-5xl font-extrabold tracking-tight sm:text-[5rem]">
@@ -25,13 +49,6 @@ export default async function Home() {
             <TaskForm />
             <TaskList />
           </div>
-          {/* Authentication */}
-          <SignedOut>
-            <SignInButton />
-          </SignedOut>
-          <SignedIn>
-            <UserButton />
-          </SignedIn>
         </div>
       </main>
     </HydrateClient>
