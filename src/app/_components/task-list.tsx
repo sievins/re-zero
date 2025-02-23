@@ -142,7 +142,7 @@ function TaskListContent() {
   const [parent] = useAutoAnimate();
 
   return (
-    <div ref={parent} className="space-y-2">
+    <div ref={parent} className="min-w-[18rem] space-y-2 sm:min-w-[32rem]">
       {tasks.map((item, index) => (
         <div key={item.key}>
           <div
