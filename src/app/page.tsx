@@ -8,6 +8,7 @@ import { currentUser } from "@clerk/nextjs/server";
 import { LogIn, LogOut } from "lucide-react";
 import { Button } from "~/components/ui/button";
 import { HydrateClient, api } from "~/trpc/server";
+import { Instructions } from "~/app/_components/instructions";
 import { TaskList } from "~/app/_components/task-list";
 import { TaskForm } from "~/app/_components/task-form";
 
@@ -45,7 +46,8 @@ export default async function Home() {
               Complete tasks with zero resistance
             </h2>
           </div>
-          <div className="flex flex-col items-center gap-8">
+          <div className="flex w-full flex-col items-center gap-8">
+            <Instructions />
             <TaskForm />
             <TaskList />
           </div>
