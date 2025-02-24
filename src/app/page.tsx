@@ -11,6 +11,7 @@ import { HydrateClient, api } from "~/trpc/server";
 import { Instructions } from "~/app/_components/instructions";
 import { TaskList } from "~/app/_components/task-list";
 import { TaskForm } from "~/app/_components/task-form";
+import { ShowIntructionsButton } from "~/app/_components/show-instuctions-button";
 
 export default async function Home() {
   const user = await currentUser();
@@ -20,7 +21,8 @@ export default async function Home() {
     <HydrateClient>
       <main className="flex min-h-screen flex-col items-center bg-gradient-to-b from-[#f7fafd] to-[#ebf2fa]">
         {/* Authentication */}
-        <div className="my-4 mr-8 flex w-screen justify-end">
+        <div className="my-4 mr-8 flex w-screen justify-end space-x-2">
+          <ShowIntructionsButton />
           <SignedOut>
             <SignInButton>
               <Button>
@@ -36,7 +38,7 @@ export default async function Home() {
             </SignOutButton>
           </SignedIn>
         </div>
-        <div className="container absolute flex flex-col items-center justify-center gap-10 px-4 py-20 sm:relative sm:gap-16 sm:py-16">
+        <div className="container flex flex-col items-center justify-center gap-10 px-4 pb-16 pt-4 sm:gap-16 sm:pt-16">
           {/* Main content */}
           <div className="flex flex-col items-center gap-4">
             <h1 className="text-5xl font-extrabold tracking-tight sm:text-[5rem]">
