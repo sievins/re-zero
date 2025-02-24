@@ -148,7 +148,7 @@ function TaskListContent() {
           <div
             className={cn(
               "flex w-[18rem] items-center rounded-md p-2 transition-colors sm:w-[32rem]",
-              markedTasks.includes(item.id) ? "bg-primary/40" : "",
+              markedTasks.includes(item.id) && "bg-primary/40",
             )}
           >
             <Checkbox
@@ -158,7 +158,10 @@ function TaskListContent() {
             />
             <label
               htmlFor={`${item.id}`}
-              className="ml-2 max-w-sm text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+              className={cn(
+                "ml-2 max-w-sm text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70",
+                !isSignedIn && item.key === "1" && "text-destructive",
+              )}
             >
               {item.description}
               {deleteErrorTasks.includes(item.id) && (
