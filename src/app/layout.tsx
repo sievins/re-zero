@@ -5,6 +5,7 @@ import { type Metadata } from "next";
 import { ClerkProvider } from "@clerk/nextjs";
 
 import { TRPCReactProvider } from "~/trpc/react";
+import { PostHogProvider } from "~/lib/providers/posthog-provider";
 
 export const metadata: Metadata = {
   title: "Re: Zero",
@@ -19,7 +20,9 @@ export default function RootLayout({
     <html lang="en" className={`${GeistSans.variable}`}>
       <body>
         <TRPCReactProvider>
-          <ClerkProvider>{children}</ClerkProvider>
+          <ClerkProvider>
+            <PostHogProvider>{children}</PostHogProvider>
+          </ClerkProvider>
         </TRPCReactProvider>
       </body>
     </html>
