@@ -6,6 +6,7 @@ import { ClerkProvider } from "@clerk/nextjs";
 
 import { TRPCReactProvider } from "~/trpc/react";
 import { PostHogProvider } from "~/lib/providers/posthog-provider";
+import { TooltipProvider } from "~/components/ui/tooltip";
 
 export const metadata: Metadata = {
   title: "Re: Zero",
@@ -21,7 +22,9 @@ export default function RootLayout({
       <body>
         <TRPCReactProvider>
           <ClerkProvider>
-            <PostHogProvider>{children}</PostHogProvider>
+            <PostHogProvider>
+              <TooltipProvider delayDuration={0}>{children}</TooltipProvider>
+            </PostHogProvider>
           </ClerkProvider>
         </TRPCReactProvider>
       </body>

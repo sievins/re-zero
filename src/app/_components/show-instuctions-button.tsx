@@ -2,6 +2,7 @@
 
 import { useAutoAnimate } from "@formkit/auto-animate/react";
 import { useEffect, useState } from "react";
+import { Eye } from "lucide-react";
 import { Button } from "~/components/ui/button";
 import { getCookie, setCookie } from "~/lib/actions/cookie";
 import { cookieNames } from "~/lib/actions/cookie-names";
@@ -31,7 +32,7 @@ export function ShowIntructionsButton() {
           onClick={() => setCookie(cookieNames.showInstructions, "true")}
           className="min-w-40"
         >
-          Show instructions
+          <Eye /> Show instructions
         </Button>
       )}
     </div>
